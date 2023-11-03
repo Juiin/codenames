@@ -1,0 +1,361 @@
+<html>
+	<head>
+		<link rel="stylesheet"  href="client/style.css" >
+		<title>CodeNames</title>
+                <script src="/client/jquery.min.js" type="text/javascript"></script>
+                <script src="/client/socket.io-1.4.5.js"></script>
+                <script src="/client/sorttable.js"></script>
+	</head>
+<body>
+    
+    <div style="display:flex;justify-content:center;align-items:center;">
+        <!--
+	<div id="signDiv">
+		<div id="login" style="color: white; text-shadow: -1px -1px 0px rgb(0, 0, 0), 1px -1px 0px rgb(0, 0, 0), -1px 1px 0px rgb(0, 0, 0), 1px 1px 0px rgb(0, 0, 0);">Username: <input id="signDiv-username" type="text">
+		<button id="signDiv-signIn">Sign In</button></div>
+	</div>
+        -->
+        <div id="signDiv">
+                <h1 style="text-align: center; font-family: Courier New; color: white; text-shadow: -1px -1px 0px rgb(0, 0, 0), 1px -1px 0px rgb(0, 0, 0), -1px 1px 0px rgb(0, 0, 0), 1px 1px 0px rgb(0, 0, 0);">Login</h1>
+                <div id="login" style="color: white; text-shadow: -1px -1px 0px rgb(0, 0, 0), 1px -1px 0px rgb(0, 0, 0), -1px 1px 0px rgb(0, 0, 0), 1px 1px 0px rgb(0, 0, 0);">
+                    Username: <input id="signDiv-username" type="text">
+                    <button id="signDiv-signIn">Login</button> 
+                </div>
+                <hr>
+                <div id="leaderboards">
+                    <h1 style="text-align: center; font-family: Courier New; color: white; text-shadow: -1px -1px 0px rgb(0, 0, 0), 1px -1px 0px rgb(0, 0, 0), -1px 1px 0px rgb(0, 0, 0), 1px 1px 0px rgb(0, 0, 0);">Leaderboards</h1>
+                    <table id="lbTable">
+                      <tr>
+                        <th class="sorttable_nosort">Name</th>
+                        <th>Win</th>
+                        <th>Loss</th>
+                        <th>Ratio</th>
+                        <th># Assassin Chosen</th>
+                      </tr>
+                    </table>
+                    <h1 style="text-align: center; font-family: Courier New; color: white; text-shadow: -1px -1px 0px rgb(0, 0, 0), 1px -1px 0px rgb(0, 0, 0), -1px 1px 0px rgb(0, 0, 0), 1px 1px 0px rgb(0, 0, 0);">In Placements</h1>
+                    <table id="placementsTable">
+                      <tr>
+                        <th class="sorttable_nosort">Name</th>
+                        <th>Win</th>
+                        <th>Loss</th>
+                        <th>Ratio</th>
+                        <th># Assassin Chosen</th>
+                      </tr>
+                    </table>
+                </div>
+        </div>
+        
+
+	<div id="gameDiv" style="display:none;">
+
+		<img src="client/img/gg.png" id="overlay"/>
+		
+		<div id="board">
+			<div id="board-row0" class="board-row">
+				<div id="0" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="1" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="2" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="3" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="4" class="board" onclick="clickBoard(this.id);"></div>
+			</div>
+			
+			<div id="board-row1" class="board-row">
+				
+				<div id="5" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="6" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="7" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="8" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="9" class="board" onclick="clickBoard(this.id);"></div>
+			</div>
+			
+			<div id="board-row2" class="board-row">
+				
+				<div id="10" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="11" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="12" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="13" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="14" class="board" onclick="clickBoard(this.id);"></div>
+			</div>
+			
+			<div id="board-row3" class="board-row">
+				<div id="15" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="16" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="17" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="18" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="19" class="board" onclick="clickBoard(this.id);"></div>
+			</div>
+			
+			<div id="board-row4" class="board-row">
+				<div id="20" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="21" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="22" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="23" class="board" onclick="clickBoard(this.id);"></div>
+				<div id="24" class="board" onclick="clickBoard(this.id);"></div>
+			</div>
+			
+		</div>
+		
+		<div>
+			<div id="chat-text" style="width:500px;height:100px;overflow-y:auto; border: 2px; border-style:solid ;display: inline-block; margin:1px;background-color:rgb(250,240,230);"></div>
+			
+			<div id="chat-user" style="width:130px;height:100px;overflow-y:auto;border: 2px; border-style:solid; display: inline-block;background-color:rgb(250,240,230);"></div>
+			<div id="red-score" class="score" style="width:130px;height:100px;overflow-y:auto;border: 2px; border-style:solid; display: inline-block;background: #cd3333; "></div>
+			<div id="blue-score" class="score" style="width:130px;height:100px;overflow-y:auto;border: 2px; border-style:solid; display: inline-block ;background: #1874cd"></div>
+			<button id="pass" onclick="pass();">PASS</button>
+                        <div id="timer"></div>
+                        <form id="chat-form" >
+				<input id="chat-input" type="text" style="width:500px"></input>
+			</form>
+		</div>
+			
+		<button id="spymaster" onclick="spymaster_mode();">Spymaster Mode</button>
+		<button id="new_game" onclick="new_game();">New Game</button>
+                
+		
+	</div>
+    </div>
+	
+	<script>
+		var socket = io();
+		var myTeam = "none";
+		var mySpymaster = false;
+		//score
+		var red_score = document.getElementById("red-score");
+		var blue_score = document.getElementById("blue-score");
+		
+		red_score.innerHTML = "<br/> RED <br/>";
+		blue_score.innerHTML = "<br/> BLUE <br/>";
+		
+                var time = 0;
+		
+		var board = document.getElementById("board");
+		
+		function clickBoard(clickID){
+			if(window.confirm("Are you sure?")){
+				socket.emit("clickBoard",clickID);
+			}
+		};
+		
+		function spymaster_mode(){
+			if(window.confirm("Are you sure, you want to enable Spymaster Mode?")){
+				socket.emit("spymaster");
+                                mySpymaster = true;
+			}
+		};
+		
+		function new_game(){
+                    if(window.confirm("Are you sure, you want to start a new game?")){
+                        socket.emit("newGame");
+                    }
+		};
+                
+                function pass(){
+                    socket.emit("passTurn");
+                }
+		//Teams and Score
+                socket.on("refreshScore",function(data){
+                    red_score.innerHTML = data.red;
+                    blue_score.innerHTML = data.blue;
+                    
+                    if(data.turn === "RED"){
+                        red_score.style.borderWidth = "12px";
+                        blue_score.style.borderWidth = "2px";
+                    }else{
+                        blue_score.style.borderWidth = "12px";
+                        red_score.style.borderWidth = "2px";
+                    }
+                    
+                    if((myTeam === data.turn.toLowerCase() && !mySpymaster) || time <= 0){
+                        document.getElementById("pass").style.display = "inline-block";
+                    }else{
+                        document.getElementById("pass").style.display = "none";
+                    }
+                });
+		
+		socket.on("addTeamUser",function(data){
+                    var newFontSize = Math.min(18,26 - data.name.length);
+                    
+			if(data.team == "red"){
+				red_score.innerHTML += '<div class="teamUser" style="font-size:' + newFontSize + '">' + data.name + '</div>';
+			}else if(data.team == "blue"){
+				blue_score.innerHTML += '<div class="teamUser">' + data.name + '</div>';
+			}
+		});
+		
+		red_score.onclick = function(){
+			socket.emit("changeTeam","red");
+                        myTeam = "red";
+		};
+		blue_score.onclick = function(){
+			socket.emit("changeTeam","blue");
+                        myTeam = "blue";
+		};
+		
+		
+		socket.on("addWord",function(data){
+			document.getElementById(data.id).innerHTML = data.word; 
+			document.getElementById(data.id).style.background = "#FFFFFF"; 
+			document.getElementById(data.id).style.color = "#000000"; 
+                        
+                            var newFontSize = Math.min(24,34 - document.getElementById(data.id).innerHTML.length);
+                            document.getElementById(data.id).style = "font-size:" + newFontSize;
+                        
+		});
+		
+		socket.on("changeBoardColor",function(data){
+			document.getElementById(data.id).style.background = data.color; 
+			if(data.revealed)document.getElementById(data.id).style.color = "#C0C0C0"; 
+		});
+		
+		socket.on("changeRevealed",function(data){
+			if(data.revealed){
+				document.getElementById(data.id).style.color = "#C0C0C0"; 
+				document.getElementById(data.id).style.background = data.color; 
+			}
+		});
+                
+                socket.on("refreshTimer",function(data){
+                    time = data;
+                    var minutes = Math.floor(data/60);
+                    var seconds = data % 60;
+                    if(minutes < 10){
+                        minutes = "0" + minutes;
+                    }
+                    if(seconds < 10){
+                        seconds = "0" + seconds;
+                    }
+                    timer.innerHTML =  minutes + ":" + seconds ;
+                });
+		
+		//sign
+		var signDiv = document.getElementById('signDiv');
+		var signDivUsername = document.getElementById('signDiv-username');
+		var signDivSignIn = document.getElementById('signDiv-signIn');
+                
+                
+                if(signDiv.style.display !== "none"){
+                    $.ajax({
+                        url: "https://juingames.de/php/selectCodenamesLeaderboards.php",
+                        type: "POST",
+                        success: function(data) 
+                        {   
+                            var leaderboardData = data;
+                            var lbTable = document.getElementById("lbTable");
+                            var placementsTable = document.getElementById("placementsTable");
+
+                            var users = leaderboardData.split("\n");
+                            users.splice(-1,1);
+                            for(var i=0;i<users.length;i++){
+                                
+                                var userData = users[i].split("|");
+                                
+                                if(parseInt(userData[2]) + parseInt(userData[3]) >= 10){
+                                    var row = lbTable.insertRow(-1);
+                                }else{
+                                    var row = placementsTable.insertRow(-1);
+                                }
+                                    
+
+                                var cell_1 = row.insertCell(0);
+                                cell_1.innerHTML = userData[1];
+                                var cell_2 = row.insertCell(1);
+                                cell_2.innerHTML = userData[2];
+                                var cell_3 = row.insertCell(2);
+                                cell_3.innerHTML = userData[3];
+                                var cell_4 = row.insertCell(3);
+                                cell_4.innerHTML = Math.round(parseInt(userData[2]) / (parseInt(userData[2]) + parseInt(userData[3])) * 100) + "%"; 
+                                var cell_5 = row.insertCell(4);
+                                cell_5.innerHTML = userData[4];
+
+                            }
+                            sorttable.makeSortable(lbTable);
+                            sorttable.makeSortable(placementsTable);
+                            var myTH = document.getElementsByTagName("th")[3];
+                            sorttable.innerSortFunction.apply(myTH, []);
+                            var myTH2 = document.getElementsByTagName("th")[8];
+                            sorttable.innerSortFunction.apply(myTH2, []);
+                        }
+                    });
+                }
+            
+		signDivSignIn.onclick = function(){
+			if(signDivUsername.value != ""){
+				socket.emit('signIn',{username:signDivUsername.value});
+			}
+			else alert("Please enter a Username!")
+		};
+		signDivUsername.addEventListener("keyup", function(event) {
+		event.preventDefault();
+		if (event.keyCode == 13) {
+			signDivSignIn.click();
+		}
+		});
+
+		socket.on('signInResponse',function(data){
+			if(data.success){
+				signDiv.style.display = 'none';
+				gameDiv.style.display = 'inline-block';
+			} else
+				alert("Username already in use!");
+		});
+		
+		socket.on("gg",function(data){
+                    /*
+			if(data){
+				document.getElementById("overlay").style.display = "block";
+			}else{
+				document.getElementById("overlay").style.display = "none";
+			}
+                    */
+			
+		});
+
+		//game
+		var chatText = document.getElementById('chat-text');
+		var chatInput = document.getElementById('chat-input');
+		var chatForm = document.getElementById('chat-form');
+		var chatUser = document.getElementById('chat-user');
+
+		chatUser.onclick = function(){
+			socket.emit("changeTeam","none");
+		};
+		
+		socket.on('addToUserChat',function(data){
+                    var newFontSize = Math.min(18,26 - data.length);
+			chatUser.innerHTML += '<div style="font-size:' + newFontSize + '">' + data + '</div>';
+		});
+
+		socket.on("clearUserChat",function(){
+			chatUser.innerHTML = "";
+		});
+
+		socket.on('addToChat',function(data){
+			chatText.innerHTML += '<div>' + data + '</div>';
+			chatText.scrollTop = chatText.scrollHeight;
+		});
+
+		socket.on('evalAnswer',function(data){
+			console.log(data);
+		});
+                
+                socket.on("resetSpymaster",function(){
+                   mySpymaster = false; 
+                });
+
+
+		chatForm.onsubmit = function(e){
+			e.preventDefault();
+			if(chatInput.value[0] === '/')
+				socket.emit('evalServer',chatInput.value.slice(1));
+			else if(chatInput.value != "")
+				socket.emit('sendMsgToServer',chatInput.value);
+			chatInput.value = '';
+		};
+
+
+
+
+	</script>
+</body>
+</html>
