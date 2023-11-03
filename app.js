@@ -231,10 +231,10 @@ var uploadScore = function(blackSquareChosen){
     
     var mysql      = require('mysql');
     var connection = mysql.createConnection({
-        host     : process.env.[db_host],
-        user     : process.env.[db_user],
-        password : process.env.[db_pw],
-        database : process.env.[db_name],
+        host     : process.env.db_host,
+        user     : process.env.db_user,
+        password : process.env.db_pw,
+        database : process.env.db_name,
         multipleStatements: true
     });
 
