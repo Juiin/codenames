@@ -111,7 +111,10 @@
 			
 		<button id="spymaster" onclick="spymaster_mode();">Spymaster Mode</button>
 		<button id="new_game" onclick="new_game();">New Game</button>
-                
+		<select id="wordListSelect">
+					<option value="Default">Default</option>
+					<option value="Rikaido">Rikaido</option>
+		</select><br>    
 		
 	</div>
     </div>
@@ -145,9 +148,11 @@
 		};
 		
 		function new_game(){
-                    if(window.confirm("Are you sure, you want to start a new game?")){
-                        socket.emit("newGame");
-                    }
+			if(window.confirm("Are you sure, you want to start a new game?")){
+				var select = document.getElementById("wordListSelect");
+				var selectedWordList = select.options[select.selectedIndex].value;
+				socket.emit("newGame", selectedWordList);
+			}
 		};
                 
                 function pass(){
