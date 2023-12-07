@@ -283,6 +283,7 @@ io.sockets.on('connection', function(socket){
                     BOARD_ARRAY[data].revealed = true;
                     for(var i in SOCKET_LIST){
                         SOCKET_LIST[i].emit("changeBoardColor",BOARD_ARRAY[data]);
+						socket.emit("addToChat",socket.username + " chose " + "<span style='color:" + BOARD_ARRAY[data].color +"'>" + BOARD_ARRAY[data].word + "</span>");
                     }
                     if(socket.team === "red"){
                         if(BOARD_ARRAY[data].color !== COLOR_RED){
